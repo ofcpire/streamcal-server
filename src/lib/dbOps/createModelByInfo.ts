@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
-import { LiveStatusSchema } from './db/schema.js';
+import { LiveStatusSchema } from '../dbBase/schema.js';
 
 //각 채널 별 live status 모델을 만드는 함수
-const createModelByInfo = (channelInfo) => {
+const createModelByInfo = (channelInfo: ChannelInfoType) => {
   console.log(
-    `Start Create Model - ${channelInfo.channelName}(${channelInfo.channelId})`
+    `Start Create Model - ${channelInfo.channelName}(${channelInfo.channelId})`,
   );
   const channelInfoModel = mongoose.model(
     'liveStatus',
     LiveStatusSchema,
-    channelInfo.channelId
+    channelInfo.channelId,
   );
   return channelInfoModel;
 };
