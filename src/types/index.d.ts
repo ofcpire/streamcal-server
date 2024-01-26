@@ -1,4 +1,5 @@
 interface ChannelInfoType {
+  _id: string;
   channelId: string;
   channelName: string;
   channelImageUrl: string;
