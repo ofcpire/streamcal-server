@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { StreamCalController } from './stream-cal.controller';
+import {
+  ChannelListController,
+  StreamCalController,
+} from './stream-cal.controller';
 
 @Module({
-  controllers: [StreamCalController],
+  controllers: [StreamCalController, ChannelListController],
 })
 export class StreamCalModule {}
