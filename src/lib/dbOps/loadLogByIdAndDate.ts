@@ -1,4 +1,7 @@
 import channelModelsGlobal from 'src/global/channelModels';
+import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const loadLogByIdAndDate = async (channelId: string, date: string) => {
   const response = {
@@ -7,23 +10,17 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
     data: null,
   };
   try {
-    const nowDate = new Date();
-    if (Number.isNaN(nowDate.getFullYear())) {
-      throw new Error(`Invalid date format(${nowDate})`);
-    }
-    const nowDateString = `${nowDate.getFullYear()}-${
-      nowDate.getMonth() + 1
-    }-${nowDate.getDate()}`;
-    const targetDate = date || nowDateString;
+    const targetDate = date || dayjs().startOf('day').toISOString();
+    console.log(targetDate);
     const channelModelObjById = channelModelsGlobal.channelModelsArray.find(
       (obj) => obj.channelId === channelId,
     );
-    const targetDateObj = new Date(targetDate);
+    const targetDateObj = dayjs(targetDate);
 
     const channelLogByDate = await channelModelObjById.channelModel.find({
       timestamp: {
-        $gte: targetDateObj.getTime(),
-        $lt: targetDateObj.getTime() + 24 * 60 * 60000,
+        $gte: targetDateObj.valueOf(),
+        $lt: targetDateObj.valueOf() + 24 * 60 * 60000,
       },
     });
     const message =
