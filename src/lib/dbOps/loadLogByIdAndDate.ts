@@ -1,15 +1,15 @@
 import channelModelsGlobal from 'src/global/channelModels';
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
+import loadChannelList from './loadChannelList';
 dayjs.extend(utc);
 
 const loadLogByIdAndDate = async (channelId: string, date: string) => {
-  const response = {
-    statusCode: null,
-    message: null,
-    data: null,
-  };
+  const isChannelExist = (await loadChannelList()).some(
+    (channelInfo) => channelInfo.channelId === channelId,
+  );
   try {
+    if (!isChannelExist) throw new Error('Unknown Channel ID');
     const targetDate = date || dayjs().startOf('day').toISOString();
     console.log(targetDate);
     const channelModelObjById = channelModelsGlobal.channelModelsArray.find(
@@ -23,17 +23,10 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
         $lt: targetDateObj.valueOf() + 24 * 60 * 60000,
       },
     });
-    const message =
-      channelLogByDate.length > 0 ? null : '해당 일자의 데이터가 없습니다.';
-    response.statusCode = 200;
-    response.message = message;
-    response.data = channelLogByDate;
-    return response;
+    return channelLogByDate;
   } catch (err) {
-    console.log(`BAD REQUEST: ${err}`);
-    response.statusCode = 400;
-    response.message = '잘못된 요청입니다.';
-    return response;
+    console.log(err);
+    throw new Error('Bad Request');
   }
 };
 
