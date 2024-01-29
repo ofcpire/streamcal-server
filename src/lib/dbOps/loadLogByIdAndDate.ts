@@ -3,6 +3,7 @@ import createAndPushNewChannelModel from './createAndPushNewChannelModel';
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
 import loadChannelList from './loadChannelList';
+import processChannelInfo from '../utils/processChannelInfo';
 dayjs.extend(utc);
 
 const loadLogByIdAndDate = async (channelId: string, date: string) => {
@@ -33,7 +34,10 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
         $lt: targetDateObj.valueOf() + 24 * 60 * 60000,
       },
     });
-    return { channelInfo, log: channelLogByDate };
+    return {
+      channelInfo: processChannelInfo(channelInfo),
+      log: channelLogByDate,
+    };
   } catch (err) {
     console.log(err);
     throw new Error('Bad Request');
