@@ -33,7 +33,7 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
         $lt: targetDateObj.valueOf() + 24 * 60 * 60000,
       },
     });
-    return channelLogByDate;
+    return { channelInfo, log: channelLogByDate };
   } catch (err) {
     console.log(err);
     throw new Error('Bad Request');
