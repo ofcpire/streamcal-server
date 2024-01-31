@@ -7,12 +7,13 @@ const dbPort = process.env.DB_PORT;
 
 // MONGOOSE CONNECT
 const connectDB = (databaseName: string) => {
-  const dbConnectString = isDBSecured
-    ? `mongodb://${dbId}:${dbPw}@${dbAddress}:${dbPort}/${databaseName}`
-    : `mongodb://${dbAddress}:${dbPort}/${databaseName}`;
+  const dbConnectString =
+    isDBSecured === 'true'
+      ? `mongodb://${dbId}:${dbPw}@${dbAddress}:${dbPort}/${databaseName}`
+      : `mongodb://${dbAddress}:${dbPort}/${databaseName}`;
   console.log(dbConnectString);
   mongoose
-    .connect(`mongodb://127.0.0.1:27017/${databaseName}`)
+    .connect(dbConnectString)
     .then(() => {
       console.log(`Connected to MongoDB => ${databaseName}`);
     })
