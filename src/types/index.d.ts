@@ -8,4 +8,14 @@ interface ChannelInfoType {
   channelDescription: string;
   followerCount: number;
   openLive: boolean;
+  createdAt: string;
+}
+
+interface ChannelInfoSchemaType {
+  channelId: string;
+  liveTitle: string;
+  status: string;
+  liveCategory: string;
+  liveCategoryValue: string;
+  timestamp: string;
 }

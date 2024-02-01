@@ -4,6 +4,7 @@ const processChannelInfo = (channelInfo: ChannelInfoType) => {
     channelName: channelInfo.channelName,
     channelType: channelInfo.channelType,
     verifiedMark: channelInfo.verifiedMark,
+    createdAt: channelInfo.createdAt,
   };
 };
 

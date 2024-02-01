@@ -25,4 +25,5 @@ export const ChannelInfoSchema = new mongoose.Schema({
   channelType: String,
   followerCount: Number,
   verifiedMark: Boolean,
+  createdAt: String,
 });
