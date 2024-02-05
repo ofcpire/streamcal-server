@@ -12,8 +12,12 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
   );
   try {
     if (!channelInfo) throw new Error('Unknown Channel ID');
-    const targetDate = date || dayjs().startOf('day').toISOString();
+
+    const nowDate = dayjs();
+    const targetDate = date || nowDate.startOf('day').toISOString();
+    const targetDateObj = dayjs(targetDate);
     console.log(targetDate);
+
     let channelModelObjById = channelModelsGlobal.channelModelsArray.find(
       (obj) => obj.channelId === channelId,
     );
@@ -26,8 +30,7 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
           `Unknown Case: Channel ${channelInfo.channelName}(${channelInfo.channelId}) Info exist, but failed to create model`,
         );
     }
-    const targetDateObj = dayjs(targetDate);
-
+    const updating = nowDate.diff(targetDateObj, 'd') === 0 ? true : false;
     const channelLogByDate = await channelModelObjById.channelModel.find({
       timestamp: {
         $gte: targetDateObj.valueOf(),
@@ -35,6 +38,10 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
       },
     });
     return {
+      metadata: {
+        targetDate: targetDateObj.format('YYYY-MM-DD'),
+        updating,
+      },
       channelInfo: processChannelInfo(channelInfo),
       log: channelLogByDate,
     };
