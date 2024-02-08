@@ -6,6 +6,7 @@ import channelModelsGlobal from './global/channelModels';
 async function bootstrap() {
   channelModelsGlobal.channelModelsArray = await setupDB();
   const app = await NestFactory.create(StreamCalModule);
+  app.enableCors();
   await app.listen(15645);
 }
 bootstrap();

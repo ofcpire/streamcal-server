@@ -6,11 +6,12 @@ import {
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  controllers: [StreamCalController, ChannelListController],
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env', '.env.local'],
+      isGlobal: true,
     }),
   ],
+  controllers: [StreamCalController, ChannelListController],
 })
 export class StreamCalModule {}
