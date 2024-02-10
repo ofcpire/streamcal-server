@@ -16,6 +16,7 @@ export class StreamCalController {
     this.logger.log(
       `RES targetDate:${resData.metadata.targetDate} updating:${resData.metadata.updating} logLength:${resData.log.length}`,
     );
+    return resData;
   }
 }
 
