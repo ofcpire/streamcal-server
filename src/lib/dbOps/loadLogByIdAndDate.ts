@@ -4,6 +4,8 @@ import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
 import loadChannelList from './loadChannelList';
 import processChannelInfo from '../utils/processChannelInfo';
+import { Logger } from '@nestjs/common';
+const logger = new Logger('loadLogByIdAndDate');
 dayjs.extend(utc);
 
 const loadLogByIdAndDate = async (channelId: string, date: string) => {
@@ -16,7 +18,6 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
     const nowDate = dayjs();
     const targetDate = date || nowDate.startOf('day').toISOString();
     const targetDateObj = dayjs(targetDate);
-    console.log(targetDate);
 
     let channelModelObjById = channelModelsGlobal.channelModelsArray.find(
       (obj) => obj.channelId === channelId,
@@ -46,7 +47,7 @@ const loadLogByIdAndDate = async (channelId: string, date: string) => {
       log: channelLogByDate,
     };
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     throw new Error('Bad Request');
   }
 };
