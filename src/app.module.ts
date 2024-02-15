@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
-import {
-  ChannelListController,
-  StreamCalController,
-} from './stream-cal.controller';
+import { StreamCalController } from './controller/stream-cal/stream-cal.controller';
+import { ChannelListController } from './controller/channel-list/channel-list.controller';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -14,4 +12,4 @@ import { ConfigModule } from '@nestjs/config';
   ],
   controllers: [StreamCalController, ChannelListController],
 })
-export class StreamCalModule {}
+export class AppModule {}

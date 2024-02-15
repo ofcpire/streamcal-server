@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Query, Logger } from '@nestjs/common';
 import loadLogByIdAndDate from 'src/lib/dbOps/loadLogByIdAndDate';
-import processChannelList from 'src/lib/dbOps/processChannelList';
 
 @Controller('streamcal')
 export class StreamCalController {
@@ -16,19 +15,6 @@ export class StreamCalController {
     this.logger.log(
       `RES targetDate:${resData.metadata.targetDate} updating:${resData.metadata.updating} logLength:${resData.log.length}`,
     );
-    return resData;
-  }
-}
-
-@Controller('channel')
-export class ChannelListController {
-  private readonly logger = new Logger(ChannelListController.name);
-
-  @Get()
-  async sendChnanelList(@Query('page') page: number) {
-    this.logger.log(`REQ page:${page}`);
-    const resData = await processChannelList(page);
-    this.logger.log(`RES channel list length:${resData.length}`);
     return resData;
   }
 }
