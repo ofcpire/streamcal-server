@@ -7,7 +7,11 @@ import {
   Response,
 } from '@nestjs/common';
 import { Response as Res } from 'express';
-import loadLogByIdAndDate from 'src/lib/dbOps/loadLogByIdAndDate';
+import loadLogByIdAndDate from 'src/lib/dbOps/streamcal/loadLogByIdAndDate';
+import loadLogByIdAndWeek from 'src/lib/dbOps/streamcal/loadLogByIdAndWeek';
+import processChannelInfo from 'src/lib/utils/processChannelInfo';
+import findChannelAndModel from 'src/lib/utils/streamcal/findChannelAndModel';
+import queryDateToDate from 'src/lib/utils/streamcal/queryDateToDate';
 
 @Controller('streamcal')
 export class StreamCalController {
@@ -17,9 +21,16 @@ export class StreamCalController {
     @Response() res: Res,
     @Param('channelId') channelId: string,
     @Query('date') date: string,
+    @Query('type') type: string,
   ) {
     this.logger.log(`REQ channelId: ${channelId} date:${date}`);
-    const resData = await loadLogByIdAndDate(channelId, date);
+    const targetDate = queryDateToDate(date);
+    const channelInfo = await findChannelAndModel(channelId);
+    const resData =
+      type === 'week'
+        ? await loadLogByIdAndWeek(channelId, targetDate)
+        : await loadLogByIdAndDate(channelId, targetDate);
+    resData['channelInfo'] = processChannelInfo(channelInfo);
     const cache = resData.metadata.updating
       ? 60 * 1000
       : 30 * 24 * 60 * 60 * 1000;
