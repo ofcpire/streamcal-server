@@ -19,3 +19,12 @@ interface ChannelInfoSchemaType {
   liveCategoryValue: string;
   timestamp: string;
 }
+
+interface ChannelLogType {
+  channelId: string;
+  liveTitle: string;
+  status: string;
+  liveCategory: string;
+  liveCategoryValue: string;
+  timestamp: string;
+}
