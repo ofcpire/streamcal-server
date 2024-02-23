@@ -20,13 +20,14 @@ const loadMonthLogByIdAndDate = async (
         $lt: targetDate.endOf('month').valueOf(),
       },
     })) as ChannelLogType[];
-    const filteredChannelLog = channelLogByMonth.filter(
-      (log) =>
-        !(
+    const filteredChannelLog = channelLogByMonth.filter((log) => {
+      if (dayjs(log.timestamp).date() === 1) return true;
+      else
+        return !(
           dayjs(log.timestamp).hour() === 0 &&
           dayjs(log.timestamp).minute() === 0
-        ),
-    );
+        );
+    });
     return {
       metadata: {
         type: 'month',

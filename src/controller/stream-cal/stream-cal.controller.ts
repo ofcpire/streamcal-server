@@ -31,9 +31,7 @@ export class StreamCalController {
         ? await loadMonthLogByIdAndDate(channelId, targetDate)
         : await loadLogByIdAndDate(channelId, targetDate);
     resData['channelInfo'] = processChannelInfo(channelInfo);
-    const cache = resData.metadata.updating
-      ? 60 * 1000
-      : 30 * 24 * 60 * 60 * 1000;
+    const cache = resData.metadata.updating ? 60 * 1000 : 5 * 60 * 1000;
     this.logger.log(
       `RES targetDate:${resData.metadata.targetDate} updating:${resData.metadata.updating} logLength:${resData.log.length}`,
     );

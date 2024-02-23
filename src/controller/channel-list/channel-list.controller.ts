@@ -6,7 +6,7 @@ export class ChannelListController {
   private readonly logger = new Logger(ChannelListController.name);
 
   @Get()
-  @Header('Cache-Control', 'max-age=300,000')
+  @Header('Cache-Control', 'max-age=300')
   async sendChnanelList(@Query('page') page: number) {
     this.logger.log(`REQ page:${page}`);
     const resData = await processChannelList(page);
