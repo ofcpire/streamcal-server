@@ -27,3 +27,9 @@ export const ChannelInfoSchema = new mongoose.Schema({
   verifiedMark: Boolean,
   createdAt: String,
 });
+
+export const LiveCategorySchema = new mongoose.Schema({
+  liveCategory: String,
+  liveCategoryValue: String,
+  lastPlayedAt: Date,
+});

@@ -28,3 +28,9 @@ interface ChannelLogType {
   liveCategoryValue: string;
   timestamp: string;
 }
+
+interface liveCategoryObjType {
+  liveCategory: string;
+  liveCategoryValue: string;
+  lastPlayedAt: string;
+}
