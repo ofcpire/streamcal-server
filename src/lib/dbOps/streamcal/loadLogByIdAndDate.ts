@@ -1,4 +1,5 @@
 import channelModelsGlobal from 'src/global/channelModels';
+import { liveCategoryModel } from 'src/lib/dbBase/models';
 import * as dayjs from 'dayjs';
 import * as utc from 'dayjs/plugin/utc';
 import { Logger } from '@nestjs/common';
@@ -20,6 +21,19 @@ const loadLogByIdAndDate = async (
         $lt: targetDate.valueOf() + 24 * 60 * 60000,
       },
     })) as ChannelLogType[];
+    const liveCategories = (await liveCategoryModel.find(
+      {},
+    )) as liveCategoryObjType[];
+    const filteredChannelLogByDate = channelLogByDate.map((log) => {
+      const existLiveCategory = liveCategories.find(
+        (categoryObj: liveCategoryObjType) =>
+          categoryObj.liveCategory === log.liveCategory,
+      );
+      if (!existLiveCategory) return log;
+      else if (log.liveCategoryValue !== existLiveCategory.liveCategoryValue)
+        log.liveCategoryValue = existLiveCategory.liveCategoryValue;
+      return log;
+    });
     return {
       metadata: {
         type: 'date',
@@ -27,7 +41,7 @@ const loadLogByIdAndDate = async (
         updating: serverTime.isSame(targetDate, 'day') ? true : false,
         serverTime: serverTime.toISOString(),
       },
-      log: channelLogByDate,
+      log: filteredChannelLogByDate,
     };
   } catch (err) {
     logger.error(err);
