@@ -1,15 +1,15 @@
 import { Controller, Get, Query, Logger, Header } from '@nestjs/common';
-import processChannelList from 'src/lib/dbOps/processChannelList';
+import { ChannelService } from './channel.service';
 
 @Controller('channel')
-export class ChannelListController {
-  private readonly logger = new Logger(ChannelListController.name);
+export class ChannelController {
+  constructor(private readonly channelService: ChannelService) {}
+  private readonly logger = new Logger(ChannelController.name);
 
   @Get()
   @Header('Cache-Control', 'max-age=300')
   async sendChnanelList(@Query('page') page: number) {
-    this.logger.log(`REQ page:${page}`);
-    const resData = await processChannelList(page);
+    const resData = await this.channelService.getAllChannelInfos();
     this.logger.log(`RES channel list length:${resData.length}`);
     return resData;
   }

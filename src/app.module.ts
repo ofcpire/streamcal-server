@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { StreamCalController } from './controller/stream-cal/stream-cal.controller';
-import { ChannelListController } from './controller/channel-list/channel-list.controller';
 import { ConfigModule } from '@nestjs/config';
+import { ChannelModule } from './channel/channel.module';
+import { StreamcalModule } from './streamcal/streamcal.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -9,7 +11,10 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: ['.env', '.env.local'],
       isGlobal: true,
     }),
+    ChannelModule,
+    StreamcalModule,
+    CategoryModule,
+    MongooseModule.forRoot(process.env.MONGODB_URL),
   ],
-  controllers: [StreamCalController, ChannelListController],
 })
 export class AppModule {}
