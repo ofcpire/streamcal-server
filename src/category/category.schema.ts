@@ -9,6 +9,8 @@ export class LiveCategory extends Document {
   liveCategory: string;
   @Prop()
   liveCategoryValue: string;
+  @Prop()
+  players: { cannelId: string; playedAt: Date }[];
 }
 
 export const LiveCategorySchema = SchemaFactory.createForClass(LiveCategory);

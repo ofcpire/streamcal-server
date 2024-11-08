@@ -19,4 +19,37 @@ export class CategoryRepository {
     };
     return await this.liveCategoryModel.find(query).lean();
   }
+
+  async fetchCategoryDetailByLiveCategory(
+    liveCategory: string,
+  ): Promise<liveCategoryObjType> {
+    const query = {
+      liveCategory,
+    };
+    return await this.liveCategoryModel.findOne(query).lean();
+  }
+
+  async fetchCategoryListByPageAndKeyword(
+    page: number,
+    keyword: string | undefined,
+    pageSize: number = 50,
+  ): Promise<liveCategoryObjType[]> {
+    const query = keyword
+      ? {
+          liveCategoryValue: { $regex: keyword, $options: 'i' },
+        }
+      : {};
+    return await this.liveCategoryModel
+      .find(query)
+      .select('lastPlayedAt liveCategory liveCategoryValue')
+      .sort({ lastPlayedAt: -1 })
+      .skip((page - 1) * pageSize) // 페이지에 맞게 항목 건너뛰기
+      .limit(pageSize)
+      .lean();
+  }
+
+  async countCategoryLength() {
+    const count = await this.liveCategoryModel.countDocuments();
+    return count;
+  }
 }
