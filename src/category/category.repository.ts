@@ -24,7 +24,7 @@ export class CategoryRepository {
     liveCategory: string,
   ): Promise<liveCategoryObjType> {
     const query = {
-      liveCategory,
+      liveCategory: { $regex: `^${liveCategory}$`, $options: 'i' },
     };
     return await this.liveCategoryModel.findOne(query).lean();
   }
@@ -48,8 +48,14 @@ export class CategoryRepository {
       .lean();
   }
 
-  async countCategoryLength() {
+  async countAllCategoryLength() {
     const count = await this.liveCategoryModel.countDocuments();
+    return count;
+  }
+  async countCategoryLengthByKeyword(keyword: string) {
+    const count = await this.liveCategoryModel.countDocuments({
+      liveCategory: keyword,
+    });
     return count;
   }
 }

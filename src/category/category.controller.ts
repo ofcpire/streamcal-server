@@ -23,8 +23,9 @@ export class CategoryController {
     @Query('keyword') keyword: string,
     @Query('pageSize') pageSize: number,
   ) {
+    const pageNum = page && page > 0 ? page : 1;
     const resData = await this.categoryService.loadCategoryListByKeywordAndPage(
-      page,
+      pageNum,
       keyword,
       pageSize,
     );

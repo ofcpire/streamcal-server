@@ -16,8 +16,9 @@ export class CategoryService {
   async loadCategoryDetailByLiveCategory(liveCategory: string) {
     const data =
       await this.categoryRepository.fetchCategoryDetailByLiveCategory(
-        liveCategory,
+        liveCategory.toLowerCase(),
       );
+    if (!data) throw new Error('no data');
     if (data.players) {
       const channelList = await this.channelRepository.fetchAllChannelInfos();
       const channelMap = new Map<string, ChannelInfoType>();
@@ -43,7 +44,9 @@ export class CategoryService {
         keyword,
         pageSize,
       );
-    const documentCount = await this.categoryRepository.countCategoryLength();
+    const documentCount = keyword
+      ? await this.categoryRepository.countCategoryLengthByKeyword(keyword)
+      : await this.categoryRepository.countAllCategoryLength();
     return {
       categoryList,
       metadata: {
