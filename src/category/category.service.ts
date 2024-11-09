@@ -29,7 +29,6 @@ export class CategoryService {
         player['channelInfo'] = channelInfo || null;
       }
     }
-    data.players.reverse();
     return data;
   }
 
