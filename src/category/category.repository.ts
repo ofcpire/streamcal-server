@@ -23,10 +23,29 @@ export class CategoryRepository {
   async fetchCategoryDetailByLiveCategory(
     liveCategory: string,
   ): Promise<liveCategoryObjType> {
+    const hundredDaysAgo = new Date();
+    hundredDaysAgo.setDate(hundredDaysAgo.getDate() - 100);
     const query = {
       liveCategory: { $regex: `^${liveCategory}$`, $options: 'i' },
     };
-    return await this.liveCategoryModel.findOne(query).lean();
+    const result = (await this.liveCategoryModel.aggregate([
+      { $match: query },
+      {
+        $project: {
+          lastPlayedAt: 1,
+          liveCategory: 1,
+          liveCategoryValue: 1,
+          players: {
+            $filter: {
+              input: '$players',
+              as: 'players',
+              cond: { $gte: ['$$players.playedAt', hundredDaysAgo] },
+            },
+          },
+        },
+      },
+    ])) as unknown as Promise<liveCategoryObjType>[];
+    return result[0];
   }
 
   async fetchCategoryListByPageAndKeyword(
